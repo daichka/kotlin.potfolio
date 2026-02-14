@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Алиев Кямал</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        pyblue: '#306998',
+                        pyyellow: '#FFD43B',
+                        kotpurple: '#7F52FF',
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            width: 100%;
+            margin: 0;
+            overflow-x: hidden; /* Глобальный запрет прокрутки */
+        }
+        
+        /* Гарантия, что контент не шире экрана */
+        main {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .tech-tag { transition: all 0.3s ease; }
+        .tech-tag:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .project-card { transition: all 0.3s ease; }
+        .project-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .app-icon { transition: transform 0.3s ease; }
+        .group:hover .app-icon { transform: scale(1.05); }
+        
+        .btn-center {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- Navigation (Fixed) -->
+    <nav id="navbar" class="fixed w-full z-50 bg-darkbg/90 backdrop-blur-md border-b border-gray-800 top-0 left-0">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 w-full">
+                <!-- Логотип -->
+                <div class="flex-shrink-0 font-mono font-bold text-xl tracking-tighter">
+                    <span class="text-pyblue">&lt;</span>Daicha<span class="text-kotpurple">/&gt;</span>
+                </div>
+
+                <!-- МОБИЛЬНАЯ КНОПКА PDF -->
+                <div class="flex md:hidden items-center ml-auto">
+                    <div id="pdf-download-menu-mobile" class="relative group">
+                        <button class="w-10 h-10 rounded-full bg-red-600 active:bg-red-700 text-white flex items-center justify-center transition-colors shadow-md">
+                            <i class="fas fa-file-pdf text-lg"></i>
+                        </button>
+                        
+                        <!-- Меню: добавлено max-w и overflow-hidden, чтобы не вылезало -->
+                        <div class="absolute right-0 top-12 w-48 max-w-[90vw] bg-gray-800 border border-gray-700 rounded-lg shadow-xl invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-200 z-50 overflow-hidden">
+                            <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-900/50">
+                                Скачать резюме
+                            </div>
+                            <a href="/Portfolio_Desktop.pdf" download class="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white border-b border-gray-700 flex items-center gap-3">
+                                <i class="fas fa-desktop text-gray-400"></i> Десктоп
+                            </a>
+                            <a href="/Portfolio_Mobile.pdf" download class="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white flex items-center gap-3">
+                                <i class="fas fa-mobile-alt text-gray-400 pl-0.5"></i> Мобильная
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Десктопное Меню -->
+                <div class="hidden md:flex items-center">
+                    <div id="nav-links" class="ml-10 flex items-baseline space-x-8 nav-links-container">
+                        <a href="#about" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium text-gray-300 transition-colors">Главная</a>
+                        <a href="#stack" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium text-gray-300 transition-colors">Стек</a>
+                        <a href="#apps" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium text-gray-300 transition-colors">Google Play</a>
+                        <a href="#experience" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium text-gray-300 transition-colors">Проекты</a>
+                        <a href="#contact" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Контакты</a>
+                    </div>
+
+                    <!-- PDF Dropdown Десктоп -->
+                    <div id="pdf-download-menu" class="relative ml-6 group">
+                        <button class="w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition-all shadow-lg hover:scale-110 hover:shadow-red-500/30">
+                            <i class="fas fa-file-pdf text-lg"></i>
+                        </button>
+                        <div class="absolute right-0 top-12 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all transform origin-top-right z-50 overflow-hidden">
+                            <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-900/50">
+                                Скачать резюме
+                            </div>
+                            <a href="/Portfolio_Desktop.pdf" download class="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors border-b border-gray-700 flex items-center gap-3">
+                                <i class="fas fa-desktop text-gray-400"></i> Десктопная
+                            </a>
+                            <a href="/Portfolio_Mobile.pdf" download class="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors flex items-center gap-3">
+                                <i class="fas fa-mobile-alt text-gray-400 pl-0.5"></i> Мобильная
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN WRAPPER (Фиксит горизонтальный скролл) -->
+    <main class="w-full overflow-x-hidden relative">
+        
+        <!-- Hero Section -->
+        <section id="about" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+            <div class="text-center md:text-left md:flex md:items-center md:justify-between">
+                <div class="md:w-2/3">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full border border-gray-700 bg-gray-800/50 text-xs font-medium text-cyan-400 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 mr-2 animate-pulse"></span>
+                        Available for projects
+                    </div>
+                    <!-- Уменьшен размер шрифта на мобильных (text-4xl вместо 5xl) чтобы не разрывало экран -->
+                    <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-2 text-white">
+                        Алиев Кямал
+                    </h1>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
+                        <span id="hero-title-text" class="gradient-text">Full-Stack Developer</span>
+                    </h2>
+                    <p class="mt-4 text-lg sm:text-xl text-gray-400 max-w-2xl leading-relaxed">
+                        Python & Kotlin разработчик с 3-летним опытом. Создаю сложные backend-системы, веб-инструменты автоматизации и нативные мобильные приложения. 
+                        <br><span class="text-sm text-gray-500 mt-2 block">Django • FastAPI • Android • Automation • WordPress</span>
+                    </p>
+                    
+                    <div id="hero-buttons" class="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="#apps" class="btn-center h-14 px-8 bg-white text-darkbg font-bold rounded-lg hover:bg-gray-200 transition-colors gap-2">
+                            <i class="fab fa-google-play text-xl"></i> 
+                            <span class="pt-0.5">Мои Приложения</span>
+                        </a>
+                        <a href="#experience" class="btn-center h-14 px-8 border border-gray-700 rounded-lg hover:border-gray-500 hover:bg-gray-800 transition-all">
+                            <span class="pt-0.5">Мои Проекты</span>
+                        </a>
+                    </div>
+                </div>
+                 
+                <!-- Code Decoration -->
+                <div class="hidden md:block md:w-1/3 mt-10 md:mt-0 relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-pyblue to-kotpurple rounded-xl blur opacity-30"></div>
+                    <div class="relative bg-cardbg p-6 rounded-xl border border-gray-700 font-mono text-sm shadow-2xl">
+                        <div class="flex gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <p class="text-pink-400">class <span class="text-yellow-300">Kamal_Aliev</span>:</p>
+                        <p class="pl-4 text-gray-300">def <span class="text-blue-400">__init__</span>(self):</p>
+                        <p class="pl-8 text-gray-300">self.backend = [<span class="text-green-400">'Python'</span>, <span class="text-green-400">'FastAPI'</span>]</p>
+                        <p class="pl-8 text-gray-300">self.mobile = [<span class="text-green-400">'Kotlin'</span>, <span class="text-green-400">'Android'</span>]</p>
+                        <p class="pl-8 text-gray-300">self.web = [<span class="text-green-400">'WordPress'</span>, <span class="text-green-400">'JS'</span>]</p>
+                        <p class="pl-8 text-gray-300">self.experience = <span class="text-purple-400">3</span> <span class="text-gray-500"># Years</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stack Section -->
+        <section id="stack" class="py-20 bg-gray-900/50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-12 flex items-center gap-3">
+                    <i class="fas fa-layer-group text-cyan-400"></i>
+                    <span class="text-white">Технический Стек</span>
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards -->
+                    <div class="bg-cardbg rounded-2xl p-6 border border-gray-800 hover:border-pyblue/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fas fa-server text-2xl text-pyyellow"></i>
+                            <h3 class="text-xl font-bold text-white">Backend & Web</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">Python 3.11+</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">FastAPI</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">Django / DRF</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">PostgreSQL</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">WordPress API</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">Nginx</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-cyan-300 text-xs rounded border border-gray-700">Docker</span>
+                        </div>
+                    </div>
+                    <div class="bg-cardbg rounded-2xl p-6 border border-gray-800 hover:border-kotpurple/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fab fa-android text-2xl text-green-500"></i>
+                            <h3 class="text-xl font-bold text-white">Android Dev</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-purple-300 text-xs rounded border border-gray-700">Kotlin</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-purple-300 text-xs rounded border border-gray-700">Jetpack Compose</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-purple-300 text-xs rounded border border-gray-700">Coroutines</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-purple-300 text-xs rounded border border-gray-700">Retrofit 2</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-purple-300 text-xs rounded border border-gray-700">Room Database</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-purple-300 text-xs rounded border border-gray-700">MVVM / Clean</span>
+                        </div>
+                    </div>
+                    <div class="bg-cardbg rounded-2xl p-6 border border-gray-800 hover:border-red-500/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fas fa-robot text-2xl text-red-400"></i>
+                            <h3 class="text-xl font-bold text-white">Scripts & Auto</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-pink-300 text-xs rounded border border-gray-700">Aiogram</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-pink-300 text-xs rounded border border-gray-700">Selenium</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-pink-300 text-xs rounded border border-gray-700">Pandas</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-pink-300 text-xs rounded border border-gray-700">BeautifulSoup4</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-pink-300 text-xs rounded border border-gray-700">Telethon</span>
+                            <span class="tech-tag px-2 py-1 bg-gray-800 text-pink-300 text-xs rounded border border-gray-700">Celery + Redis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Google Play Section -->
+        <section id="apps" class="py-20 relative overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <span class="text-green-400 font-mono text-sm tracking-wider uppercase">Android Development</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mt-2">Опубликовано в Google Play</h2>
+                    <p class="text-gray-400 mt-4">Мои личные приложения. Полный цикл разработки: от идеи до релиза.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- APPS -->
+                    <div class="bg-gray-800/40 backdrop-blur rounded-xl p-5 border border-gray-700 hover:border-green-500/50 transition-all flex flex-col group h-full">
+                        <div class="mb-4">
+                            <img src="https://play-lh.googleusercontent.com/8m1W1nuD2clqu0wTenhN2gOktucXbcWEtq1326wmOXOtLKktNeShEFVfD6MUE6Oczqul=w480-h960-rw" loading="eager" crossorigin="anonymous" onerror="this.src='https://placehold.co/200x200/1e293b/white?text=No+Icon'" alt="Icon 1" class="app-icon w-20 h-20 rounded-2xl shadow-lg border border-gray-700 object-cover">
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Ai Chat</h3>
+                        <p class="text-gray-400 text-xs mb-4 flex-grow">
+                            «Ai Chat» — это революционный чат-бот с искусственным интеллектом, работающий на API ChatGPT, GPT-3 и GPT-4.
+                        </p>
+                        <a href="https://play.google.com/store/apps/details?id=com.daicha.gptfree" target="_blank" class="btn-center w-full py-2 rounded bg-white/5 hover:bg-white/10 text-white text-xs font-medium transition-colors border border-white/5">
+                            Google Play
+                        </a>
+                    </div>
+                    <div class="bg-gray-800/40 backdrop-blur rounded-xl p-5 border border-gray-700 hover:border-green-500/50 transition-all flex flex-col group h-full">
+                        <div class="mb-4">
+                             <img src="https://play-lh.googleusercontent.com/6bVps4Ke8KKsHQcGlwGGXqTIRivg42aPKFjgcDP0p5Ss57zNmYiV4G7sNCXxKLiBng=w480-h960-rw" loading="eager" crossorigin="anonymous" onerror="this.src='https://placehold.co/200x200/1e293b/white?text=No+Icon'" alt="Icon 2" class="app-icon w-20 h-20 rounded-2xl shadow-lg border border-gray-700 object-cover">
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Конвертер валют</h3>
+                        <p class="text-gray-400 text-xs mb-4 flex-grow">
+                            Мультивалютный конвертер, с курсами, как валют так и крипты.
+                        </p>
+                        <a href="https://play.google.com/store/apps/details?id=com.offlineconverter085.converter" target="_blank" class="btn-center w-full py-2 rounded bg-white/5 hover:bg-white/10 text-white text-xs font-medium transition-colors border border-white/5">
+                            Google Play
+                        </a>
+                    </div>
+                    <div class="bg-gray-800/40 backdrop-blur rounded-xl p-5 border border-gray-700 hover:border-green-500/50 transition-all flex flex-col group h-full">
+                        <div class="mb-4">
+                             <img src="https://play-lh.googleusercontent.com/5KF8hew2TbNkPSsDFuZn3VqmNg_cJmLGxMTEZaVqtgR2hEXes7ixmilv2mYkGH6SivYi=w480-h960-rw" loading="eager" crossorigin="anonymous" onerror="this.src='https://placehold.co/200x200/1e293b/white?text=No+Icon'" alt="Icon 3" class="app-icon w-20 h-20 rounded-2xl shadow-lg border border-gray-700 object-cover">
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Заметки</h3>
+                        <p class="text-gray-400 text-xs mb-4 flex-grow">
+                            Просто приложение для заметок и списков.
+                        </p>
+                        <a href="https://play.google.com/store/apps/details?id=com.daichasimplenotes.notes" target="_blank" class="btn-center w-full py-2 rounded bg-white/5 hover:bg-white/10 text-white text-xs font-medium transition-colors border border-white/5">
+                            Google Play
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="experience" class="py-20 bg-gray-900/50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-12 border-l-4 border-cyan-500 pl-4">Ключевые Проекты (Freelance)</h2>
+                <div class="relative border-l border-gray-700 ml-3 space-y-12">
+                    <div class="relative pl-8">
+                        <div class="absolute -left-[9px] top-0 w-5 h-5 bg-yellow-500 rounded-full border-4 border-gray-900"></div>
+                        <h3 class="text-xl font-bold text-white">Интеграция Яндекс.Такси (Full-Stack)</h3>
+                        <p class="text-sm text-yellow-500 mb-2 font-mono">Python, API Integration, Backend</p>
+                        <p class="text-gray-400">Разработка "прослойки" между мессенджером и корпоративным API такси. Реализован сложный State-Machine.</p>
+                    </div>
+                    <div class="relative pl-8">
+                        <div class="absolute -left-[5px] top-2 w-3 h-3 bg-gray-600 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-white mb-1">Внутренний Корпоративный Портал (TWA)</h3>
+                        <p class="text-sm text-cyan-500 mb-2 font-mono">JavaScript Frontend + FastAPI Backend</p>
+                        <p class="text-gray-400">Полноценное веб-приложение (Single Page Application), работающее внутри Telegram.</p>
+                    </div>
+                    <div class="relative pl-8">
+                        <div class="absolute -left-[5px] top-2 w-3 h-3 bg-gray-600 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-white mb-1">SMM Платформа Автоматизации</h3>
+                        <p class="text-sm text-purple-400 mb-2 font-mono">Python, Redis, Telethon</p>
+                        <p class="text-gray-400">Масштабируемая система для управления активностью в соцсетях. Бэкенд управляет сотнями аккаунтов.</p>
+                    </div>
+                    <div class="relative pl-8">
+                        <div class="absolute -left-[5px] top-2 w-3 h-3 bg-gray-600 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-white mb-1">E-commerce Аналитика</h3>
+                        <p class="text-sm text-blue-400 mb-2 font-mono">Python, Pandas, Selenium</p>
+                        <p class="text-gray-400">Скрипт мониторинга цен конкурентов. Сбор данных с маркетплейсов.</p>
+                    </div>
+                    <div class="relative pl-8">
+                        <div class="absolute -left-[5px] top-2 w-3 h-3 bg-gray-600 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-white mb-1">Агрегатор Недвижимости</h3>
+                        <p class="text-sm text-green-400 mb-2 font-mono">WordPress REST API, Python</p>
+                        <p class="text-gray-400">Python-скрипт, который собирает объявления и публикует их на сайте.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact" class="py-12 border-t border-gray-800 text-center">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-2xl font-bold text-white mb-8">Связаться со мной</h2>
+                <div class="flex justify-center gap-8 mb-8">
+                    <a href="https://t.me/daichitakedakz" target="_blank" class="w-12 h-12 rounded-full bg-gray-800 btn-center text-gray-400 hover:bg-blue-500 hover:text-white transition-all text-2xl shadow-lg border border-gray-700 hover:scale-110">
+                        <i class="fab fa-telegram-plane"></i>
+                    </a>
+                    <a href="https://wa.me/+77012439738" target="_blank" class="w-12 h-12 rounded-full bg-gray-800 btn-center text-gray-400 hover:bg-green-500 hover:text-white transition-all text-2xl shadow-lg border border-gray-700 hover:scale-110">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="mailto:daichaapps@gmail.com" class="w-12 h-12 rounded-full bg-gray-800 btn-center text-gray-400 hover:bg-red-500 hover:text-white transition-all text-2xl shadow-lg border border-gray-700 hover:scale-110">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+                <p class="text-gray-600 text-sm">&copy; 2026 Алиев Кямал.</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Скрипт для скрытия выпадающего меню после клика -->
+   <!-- Скрипт для авто-скрытия меню на мобильных -->
+<!-- Исправленный скрипт для меню -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Список ID наших меню (десктоп и мобилка)
+            const menuIds = ['#pdf-download-menu', '#pdf-download-menu-mobile'];
+
+            menuIds.forEach(id => {
+                const root = document.querySelector(id);
+                if (!root) return;
+
+                const button = root.querySelector('button');
+                const menuContent = root.querySelector('div.absolute');
+                const links = root.querySelectorAll('a');
+
+                // Функция "разблокировки" меню (возвращаем как было в CSS)
+                const resetMenu = () => {
+                    menuContent.style.display = ''; 
+                };
+
+                // 1. При попытке открыть меню снова (клик или тап по иконке) - убираем скрытие
+                button.addEventListener('click', resetMenu);
+                button.addEventListener('touchstart', resetMenu, { passive: true });
+                root.addEventListener('mouseenter', resetMenu); // Для десктопа
+
+                // 2. При клике на ссылку скачивания
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                        // Жестко скрываем меню
+                        menuContent.style.display = 'none';
+                        // Снимаем фокус с кнопки, чтобы убрать CSS-состояния
+                        button.blur();
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
